@@ -409,7 +409,7 @@
         
         <!-- Form Body -->
        
-            <form id="productEnhancementForm" name="product-enhancement" method="POST" data-netlify="true" class="form-body">
+            <form id="productEnhancementForm" name="product-enhancement" method="POST" data-netlify="true" netlify class="form-body">
          <input type="hidden" name="form-name" value="product-enhancement">   
             <!-- Product Information Section -->
             <div class="form-section">
@@ -546,104 +546,6 @@
             const fileUpload = document.querySelector('.file-upload');
             const fileUploadText = document.querySelector('.file-upload-text');
             const submitButton = document.querySelector('.btn-primary');
-            
-            // Form submission handler
-// Form submission handler
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Change button state to loading
-    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-    submitButton.disabled = true;
-    
-    // Get the webhook URL from the form's action attribute
-    const webhookUrl = form.getAttribute('action');
-    
-    // Create FormData object
-    const formData = new FormData();
-    
-    // Rename fields to match n8n expectations
-    // Add file upload if present
-    if (fileInput.files.length > 0) {
-        formData.append('Product Photo', fileInput.files[0]);
-    }
-    
-    // Add text fields
-    formData.append('Product Title', document.getElementById('product-title').value);
-    formData.append('Product Description', document.getElementById('product-description').value);
-    formData.append('Email', document.getElementById('email').value);
-    
-    // Add optional fields if they have values
-    if (document.getElementById('background').value) {
-        formData.append('background', document.getElementById('background').value);
-    }
-    if (document.getElementById('additional-addins').value) {
-        formData.append('additional addins', document.getElementById('additional-addins').value);
-    }
-    if (document.getElementById('style').value) {
-        formData.append('style', document.getElementById('style').value);
-    }
-    if (document.getElementById('action').value) {
-        formData.append('Action', document.getElementById('action').value);
-    }
-    if (document.getElementById('background-text').value) {
-        formData.append('background text', document.getElementById('background-text').value);
-    }
-    
-    // Add any checkbox data (marketing preferences)
-    const formatCheckboxes = document.querySelectorAll('input[name="format[]"]:checked');
-    if (formatCheckboxes.length > 0) {
-        const selectedFormats = Array.from(formatCheckboxes).map(cb => cb.value).join(', ');
-        formData.append('marketing formats', selectedFormats);
-    }
-    
-    // Send the form data to n8n webhook
-    fetch(webhookUrl, {
-        method: 'POST',
-        body: formData,
-        // Add CORS headers
-        mode: 'cors'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Success message
-        form.innerHTML = `
-            <div style="text-align: center; padding: 40px 20px;">
-                <i class="fas fa-check-circle" style="font-size: 48px; color: var(--color-success); margin-bottom: 16px;"></i>
-                <h2 style="margin-bottom: 16px;">Submission Successful!</h2>
-                <p style="margin-bottom: 24px;">We've received your product information and will send the enhanced materials to your email soon.</p>
-                <button type="button" class="btn btn-primary" onclick="location.reload()">Submit Another Request</button>
-            </div>
-        `;
-    })
-    .catch(error => {
-        // Error handling
-        console.error('Error:', error);
-        submitButton.innerHTML = '<i class="fas fa-magic"></i> Enhance My Product';
-        submitButton.disabled = false;
-        
-        // Show error message
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'alert alert-error';
-        errorDiv.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
-        errorDiv.style.borderLeft = '4px solid #ef4444';
-        errorDiv.style.color = '#b91c1c';
-        errorDiv.style.padding = 'var(--spacing-md)';
-        errorDiv.style.marginBottom = 'var(--spacing-lg)';
-        errorDiv.style.borderRadius = 'var(--radius-md)';
-        errorDiv.innerHTML = '<strong>Error:</strong> There was a problem submitting your form. Please try again.';
-        
-        form.insertBefore(errorDiv, form.firstChild);
-        
-        // Scroll to top
-        window.scrollTo(0, 0);
-    });
-});
             
             // File input change handler
             fileInput.addEventListener('change', function(e) {
